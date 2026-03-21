@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solstice Referral Program</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080B10;
+      --card:    #0F1520;
+      --card2:   #151E2E;
+      --border:  #1E2D44;
+      --gold:    #F0B90B;
+      --blue:    #3B82F6;
+      --green:   #10B981;
+      --red:     #EF4444;
+      --muted:   #6B7E99;
+      --text:    #E2E8F0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 700px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #0A1628 0%, #0D1F3C 60%, #0F2244 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 32px 30px;
+      text-align: center;
+      position: relative;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(240,185,11,0.08) 0%, transparent 70%);
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .logo-text { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo-text span { color: var(--gold); }
+    .header-badge {
+      display: inline-block;
+      background: rgba(240,185,11,0.15);
+      border: 1px solid rgba(240,185,11,0.35);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      position: relative;
+    }
+    .header h1 .gold { color: var(--gold); }
+    .header p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+      position: relative;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .body { padding: 28px 28px 32px; display: flex; flex-direction: column; gap: 24px; }
+
+    /* ── BIG STAT ── */
+    .stat-hero {
+      background: linear-gradient(135deg, #0D1F0D, #0F2410);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .stat-hero .label { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+    .stat-hero .num { font-size: 72px; font-weight: 900; color: var(--green); line-height: 1; margin-bottom: 8px; }
+    .stat-hero .desc { font-size: 14px; color: var(--muted); max-width: 320px; margin: 0 auto; }
+
+    /* ── SECTION LABEL ── */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* ── TREE VISUAL ── */
+    .tree-section { }
+    .tree-wrap {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px 20px;
+    }
+    .tree-intro {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .tree-intro strong { color: var(--text); }
+
+    .tree-node-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .t-node {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      position: relative;
+    }
+    .t-node.you {
+      border-color: var(--gold);
+      background: rgba(240,185,11,0.06);
+    }
+    .t-node .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .av-you  { background: rgba(240,185,11,0.2); }
+    .av-l1   { background: rgba(59,130,246,0.2); }
+    .av-l2   { background: rgba(16,185,129,0.15); }
+    .av-l3   { background: rgba(139,92,246,0.15); }
+
+    .t-node .name-col { flex: 1; }
+    .t-node .n-title { font-size: 13px; font-weight: 700; }
+    .t-node .n-sub { font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+
+    .earn-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .ep-gold  { background: rgba(240,185,11,0.15); color: var(--gold); }
+    .ep-blue  { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .ep-green { background: rgba(16,185,129,0.15); color: var(--green); }
+    .ep-purple{ background: rgba(139,92,246,0.15); color: #A78BFA; }
+    .ep-dim   { background: rgba(107,126,153,0.15); color: var(--muted); }
+
+    .tree-connector {
+      width: 2px;
+      height: 22px;
+      background: var(--border);
+      margin: 0 auto;
+    }
+    .tree-connector.dashed {
+      background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px);
+    }
+
+    .tree-multi-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .tree-multi-row .t-node { justify-content: space-between; }
+
+    .etc-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .dot-etc {
+      width: 6px; height: 6px;
+      background: var(--border);
+      border-radius: 50%;
+    }
+
+    /* ── COMPARISON ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .cmp {
+      border-radius: 14px;
+      padding: 20px 18px;
+      border: 1px solid;
+    }
+    .cmp.bad  { background: rgba(239,68,68,0.05); border-color: rgba(239,68,68,0.2); }
+    .cmp.good { background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2); }
+    .cmp .cmp-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .cmp.bad  .cmp-label { color: var(--red); }
+    .cmp.good .cmp-label { color: var(--green); }
+    .cmp .cmp-name { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+    .cmp .tier-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .tier-box {
+      font-size: 15px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .tb-red  { background: rgba(239,68,68,0.15); color: #F87171; }
+    .tb-gold { background: rgba(240,185,11,0.15); color: var(--gold); }
+    .tb-grn  { background: rgba(16,185,129,0.15); color: var(--green); }
+    .tb-blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+    .tb-dim  { background: rgba(107,126,153,0.1); color: var(--muted); font-size: 13px; }
+    .cmp .arrow { color: var(--muted); font-size: 13px; }
+    .cmp .cmp-verdict {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.45;
+    }
+    .cmp.bad  .cmp-verdict { color: #F87171; }
+    .cmp.good .cmp-verdict { color: var(--green); }
+
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 10px; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      background: var(--gold);
+      color: #000;
+      font-size: 13px;
+      font-weight: 800;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-body .s-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .step-body .s-sub   { font-size: 12px; color: var(--muted); line-height: 1.45; }
+    .step-body .s-link  { color: var(--gold); font-size: 12px; font-weight: 600; }
+
+    /* ── RECRUIT CALLOUT ── */
+    .recruit-box {
+      background: linear-gradient(135deg, #0D1628, #0F1F3C);
+      border: 1px solid rgba(240,185,11,0.3);
+      border-radius: 14px;
+      padding: 20px 22px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .recruit-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+    .recruit-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 5px; }
+    .recruit-desc  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .recruit-desc strong { color: var(--text); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--card2);
+      border-top: 1px solid var(--border);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .footer-left { font-size: 12px; color: var(--muted); }
+    .footer-left strong { color: var(--text); }
+    .footer-right {
+      background: rgba(240,185,11,0.1);
+      border: 1px solid rgba(240,185,11,0.25);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 480px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .tree-multi-row { grid-template-columns: 1fr; }
+      .stat-hero .num { font-size: 56px; }
+      .body { padding: 20px 18px 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-icon">☀️</div>
+      <div class="logo-text"><span>Solstice</span> Referral Program</div>
+    </div>
+    <div class="header-badge">Exclusive Partner Access</div>
+    <h1>Earn <span class="gold">70%</span> on Every Trade<br>Your Network Makes</h1>
+    <p>Powered by Orderly Network · Infinite depth · No expiry</p>
+  </div>
+
+  <div class="body">
+
+    <!-- BIG STAT -->
+    <div class="stat-hero">
+      <div class="label">Your Direct Referral Rate</div>
+      <div class="num">70%</div>
+      <div class="desc">Of all trading fees generated by people who sign up with your code — paid automatically, forever.</div>
+    </div>
+
+    <!-- TREE -->
+    <div class="tree-section">
+      <div class="sec-label">How the Tree Works</div>
+      <div class="tree-wrap">
+        <div class="tree-intro">
+          Keep <strong>5% for each level you recruit</strong> and pass the remaining rate down.<br>
+          Your sub-referrals build their own trees — and you earn from every level below you, indefinitely.
+        </div>
+
+        <div class="tree-node-row">
+
+          <!-- YOU -->
+          <div class="t-node you" style="width:80%">
+            <div class="avatar av-you">👤</div>
+            <div class="name-col">
+              <div class="n-title">You</div>
+              <div class="n-sub">Give your recruits a 65% code</div>
+            </div>
+            <div class="earn-pill ep-gold">Earn 70%</div>
+          </div>
+
+          <div class="tree-connector"></div>
+
+          <!-- LEVEL 1 -->
+          <div class="tree-multi-row" style="max-width:90%">
+            <div class="t-node">
+              <div class="avatar av-l1">👤</div>
+              <div class="name-col">
+                <div class="n-title">Recruit A</div>
+                <div class="n-sub">Gives their network 60%</div>
+              </div>
+              <div class="earn-pill ep-blue">65%</div>
+            </div>
+            <div class="t-node">
+              <div class="avatar av-l1">👤</div>
+              <div class="name-col">
+                <div class="n-title">Recruit B</div>
+                <div class="n-sub">Gives their network 60%</div>
+              </div>
+              <div class="earn-pill ep-blue">65%</div>
+            </div>
+          </div>
+
+          <div class="tree-connector"></div>
+
+          <!-- LEVEL 2 -->
+          <div class="tree-multi-row" style="max-width:75%">
+            <div class="t-node">
+              <div class="avatar av-l2">👤</div>
+              <div class="name-col">
+                <div class="n-title">Their Recruit</div>
+                <div class="n-sub">Level 2</div>
+              </div>
+              <div class="earn-pill ep-green">60%</div>
+            </div>
+            <div class="t-node">
+              <div class="avatar av-l2">👤</div>
+              <div class="name-col">
+                <div class="n-title">Their Recruit</div>
+                <div class="n-sub">Level 2</div>
+              </div>
+              <div class="earn-pill ep-green">60%</div>
+            </div>
+          </div>
+
+          <div class="tree-connector dashed"></div>
+
+          <!-- DEEPER -->
+          <div class="t-node" style="width:55%; justify-content:center; border-style:dashed;">
+            <div class="name-col" style="text-align:center;">
+              <div class="n-title" style="color:var(--muted)">Continues infinitely…</div>
+              <div class="n-sub">5% flows back to you at every level</div>
+            </div>
+            <div class="earn-pill ep-dim">5% / level</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARISON -->
+    <div>
+      <div class="sec-label">Why This Beats Axiom</div>
+      <div class="compare-grid">
+        <div class="cmp bad">
+          <div class="cmp-label">❌ Axiom</div>
+          <div class="cmp-name">30 / 3 / 2</div>
+          <div class="tier-row">
+            <span class="tier-box tb-red">30%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-red">3%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-red">2%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-dim">0</span>
+          </div>
+          <div class="cmp-verdict">Income dries up after 3 levels. Encourages self-invites to skip you entirely.</div>
+        </div>
+        <div class="cmp good">
+          <div class="cmp-label">✅ Solstice</div>
+          <div class="cmp-name">70 / 5 / 5 / 5…</div>
+          <div class="tier-row">
+            <span class="tier-box tb-gold">70%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-grn">5%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-grn">5%</span>
+            <span class="arrow">→</span>
+            <span class="tier-box tb-blue">∞</span>
+          </div>
+          <div class="cmp-verdict">The 5% continues as deep as the tree grows. Compounding, sustained revenue.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEPS -->
+    <div>
+      <div class="sec-label">How to Get Started</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="s-title">Sign in with Phantom Wallet</div>
+            <div class="s-sub">Go to <span class="s-link">solinu.exchange/trade</span> and connect your wallet to create your account.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="s-title">Create your affiliate code</div>
+            <div class="s-sub">Navigate to the <strong>Rewards</strong> tab → <strong>Affiliate</strong> section → set up your code.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="s-title">Share your code for a 70% upgrade</div>
+            <div class="s-sub">Send your code to get upgraded from the default rate to <strong>70%</strong>. Takes minutes.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="s-title">Set your indirect rate (recommend 5%)</div>
+            <div class="s-sub">Once upgraded, configure how much you keep from indirect referrals. Keeping 5% passes a generous 65% to your recruits.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECRUIT CALLOUT -->
+    <div class="recruit-box">
+      <div class="recruit-icon">📣</div>
+      <div>
+        <div class="recruit-title">When Recruiting KOLs & Traders</div>
+        <div class="recruit-desc">
+          Tell them they're getting a <strong>65% code</strong> — exclusive to your network, not available anywhere else. If they want to build their own tree, they should keep <strong>5%</strong> and pass down 60%.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      Questions? <strong>@shinobicyrano</strong> from the Orderly team is in the chat.
+    </div>
+    <div class="footer-right">☀️ solinu.exchange/trade</div>
+  </div>
+
+</div>
+</body>
+</html>
